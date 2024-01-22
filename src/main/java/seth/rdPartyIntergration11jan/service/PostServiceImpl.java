@@ -23,6 +23,8 @@ public class PostServiceImpl implements PostService {
     StringBuilder stringBuilder = new StringBuilder(baseUrl);
 
     String POST = "/posts";
+
+    String POSTBYID = "/posts/";
     @Autowired
     private RestTemplate   restTemplate;
     @Override
@@ -30,6 +32,38 @@ public class PostServiceImpl implements PostService {
         HttpEntity <Void> httpEntity  = new HttpEntity<>(getHttpHeaders());
         String url = stringBuilder.append(POST).toString();
         val response  =  restTemplate.exchange(url , HttpMethod.GET ,httpEntity,List.class);
+        return  response.getBody();
+    }
+
+    @Override
+    public Map<String, Object> getPostsById(int id) {
+        HttpEntity <Void> httpEntity  = new HttpEntity<>(getHttpHeaders());
+        String url = stringBuilder.append(POSTBYID).append(id).toString();
+        val response  =  restTemplate.exchange(url , HttpMethod.GET ,httpEntity,Map.class);
+        return  response.getBody();
+    }
+
+    @Override
+    public Map<String, Object> insertPost(Map<String, Object> payload) {
+        HttpEntity <Map> httpEntity  = new HttpEntity<>(payload,getHttpHeaders());
+        String url = stringBuilder.append(POST).toString();
+        val response  =  restTemplate.exchange(url , HttpMethod.POST ,httpEntity,Map.class);
+        return  response.getBody();
+    }
+
+    @Override
+    public Map<String, Object> updatePost(Map<String, Object> payload, int id) {
+        HttpEntity <Map> httpEntity  = new HttpEntity<>(payload,getHttpHeaders());
+        String url = stringBuilder.append(POSTBYID).append(id).toString();
+        val response  =  restTemplate.exchange(url , HttpMethod.PUT ,httpEntity,Map.class);
+        return  response.getBody();
+    }
+
+    @Override
+    public Map<String, Object> deletePost(int id) {
+        HttpEntity <Map> httpEntity  = new HttpEntity<>(getHttpHeaders());
+        String url = stringBuilder.append(POSTBYID).append(id).toString();
+        val response  =  restTemplate.exchange(url , HttpMethod.DELETE ,httpEntity,Map.class);
         return  response.getBody();
     }
 
